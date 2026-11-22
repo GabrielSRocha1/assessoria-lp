@@ -1,0 +1,13 @@
+import puppeteer from 'puppeteer-core';
+const [,, w='1440', h='900', out='/home/claude/frames/desk.png', extra=''] = process.argv;
+const browser = await puppeteer.launch({ executablePath:'/usr/bin/google-chrome', args:['--no-sandbox','--headless=new','--use-angle=swiftshader','--enable-unsafe-swiftshader','--ignore-gpu-blocklist', ...(extra?extra.split(' '):[])] });
+const page = await browser.newPage();
+const errs=[]; page.on('pageerror', e=>errs.push(e.message)); page.on('console', m=>{ if(m.type()==='error'||m.type()==='warning') errs.push(m.type()+': '+m.text()); });
+await page.setViewport({ width:+w, height:+h, deviceScaleFactor:1, isMobile:+w<800, hasTouch:+w<800 });
+await page.goto('file:///home/claude/work/dist/index.html');
+await page.waitForFunction(()=>document.getElementById('globe-hero').dataset.globeState, {timeout:30000}).catch(()=>{});
+await new Promise(r=>setTimeout(r,2500));
+console.log(JSON.stringify(await page.evaluate(()=>({st:window.LP.globes['globe-hero']?.state, ds:document.getElementById('globe-hero').dataset.globeState}))));
+await page.screenshot({ path: out });
+console.log('errors:', errs);
+await browser.close();
