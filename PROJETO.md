@@ -11,11 +11,19 @@ das alterações. **Ler antes de mexer em qualquer coisa.**
 ## 1. Regra de ouro
 
 > **Edite sempre `src/page.html` (e `src/i18n.js`) e rode `node build/sync.mjs`.**
-> Nunca edite o `lp-assessoria.html` à mão — ele é gerado.
+> Nunca edite `lp-assessoria.html` nem `index.html` à mão — os dois são gerados.
 
 ```bash
-node build/sync.mjs     # regenera lp-assessoria.html a partir do src, sem node_modules
+node build/sync.mjs     # regenera lp-assessoria.html E index.html a partir do src
+git add -A && git commit -m "..." && git push   # publica (GitHub Pages serve o main)
 ```
+
+**Página no ar:** https://gabrielsrocha1.github.io/assessoria-lp/
+**Repositório (público):** https://github.com/GabrielSRocha1/assessoria-lp — Pages
+servindo o branch `main` na raiz (`index.html`, cópia idêntica do entregável, gerada
+pelo próprio `sync.mjs` desde 22/11/2026). Depois do push, o Pages leva ~1 min para
+refletir. Atenção: repositório público = `PROJETO.md`, fonte e token visíveis (o
+token já aparece no HTML publicado de qualquer forma — limitação aceita do §3).
 
 O `sync.mjs` reaproveita o bundle do globo e as texturas que já estão embutidos no
 `lp-assessoria.html` e reaplica todo o HTML/CSS/JS vindo do `src`. Ele existe porque o
@@ -46,7 +54,9 @@ placeholders pelos blobs em base64 e pelo dicionário de idiomas.
 
 ```
 lp-assessoria/
-├── lp-assessoria.html   ← ENTREGÁVEL (gerado; nunca editar à mão)
+├── index.html           ← PÁGINA PUBLICADA no GitHub Pages (gerado; nunca editar à mão)
+├── lp-assessoria.html   ← entregável local, idêntico ao index.html (gerado)
+├── README.md  .gitignore
 ├── PROJETO.md           ← este arquivo
 ├── apps-script.gs       ← código do Google Apps Script (cópia do publicado)
 ├── package.json
@@ -673,6 +683,18 @@ antigas foram arquivadas** e criada uma única nova — URL nova terminando em
 `apps-script.gs`. POST real de validação confirmado: `{"ok":true,
 "meet":"https://meet.google.com/..."}`, evento na agenda e convite recebido.
 A URL antiga (`...SiS1EMmg/exec`) está morta — se aparecer em algum lugar, é sobra.
+
+### 22/11/2026 — Publicação no GitHub Pages
+
+Projeto versionado em **github.com/GabrielSRocha1/assessoria-lp** (público — era
+privado, mas o Pages gratuito exige público; decisão do usuário ciente da exposição
+do PROJETO.md e do token, que já era visível no HTML). Página no ar em
+**https://gabrielsrocha1.github.io/assessoria-lp/**, Pages servindo `main` na raiz.
+O `sync.mjs` passou a gerar também o `index.html` (cópia idêntica do entregável),
+para a cópia publicada nunca ficar defasada. Novos na raiz: `README.md` e
+`.gitignore` (`node_modules/`, `dist/`). Smoke test na URL pública: página 200 com
+1339 KB, globo renderizando, quiz abrindo com as bolhas e endpoint novo embutido —
+nenhum envio real feito no teste.
 
 ---
 
